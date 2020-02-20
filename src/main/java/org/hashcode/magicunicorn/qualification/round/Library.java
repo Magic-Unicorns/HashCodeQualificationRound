@@ -12,6 +12,8 @@ public class Library {
 	private final int nbOfDayToProcess;
 	private final int bookShippedPerDay;
 	private final HashSet<Book> books;
+	
+	private List<Book> livresScannes;
 
 	public Library(int nbOfBook, int nbOfDayToProcess, int bookShippedPerDay) {
 		this.nbOfBook = nbOfBook;
@@ -37,20 +39,53 @@ public class Library {
 		return bookShippedPerDay;
 	}
 
-	public Set<Book> getBooks() {
-		return books;
-	}
+    public Set<Book> getBooks(){
+        return null;
+    }
+    
+    public int calculateLibScore(int tempsRestant, Collection<Book> nonScannesBooks) {
+        int scoreLibrary = 0;
+        List<Book> books = getBooksScanables(tempsRestant, nonScannesBooks);
+        for(Book b: books) {
+            scoreLibrary += b.getScore();
+        }
+        return scoreLibrary;
+    }
 
-	public int calculateLibScore(int tempsRestant, Collection<Book> nonScannesBooks) {
-		int scoreLibrary = 0;
-		int nbBooksMax = (tempsRestant - getNbOfDayToProcess()) * getBookShippedPerDay();
-		List<Book> books = getBooks().stream().filter(b -> nonScannesBooks.contains(b))
-				.sorted((b1, b2) -> -Integer.compare(b1.getScore(), b2.getScore())).limit(nbBooksMax)
-				.collect(Collectors.toList());
-		for (Book b : books) {
-			scoreLibrary += b.getScore();
-			nonScannesBooks.remove(b);
-		}
-		return scoreLibrary;
-	}
+    protected List<Book> getBooksScanables(int tempsRestant, Collection<Book> nonScannesBooks) {
+        int nbBooksMax = (tempsRestant - getNbOfDayToProcess())*getBookShippedPerDay();
+        List<Book> books = getBooks().stream().filter(b -> nonScannesBooks.contains(b)).sorted((b1,b2)->-Integer.compare(b1.getScore(), b2.getScore())).limit(nbBooksMax).collect(Collectors.toList());
+        return books;
+    }
+    
+    public void processLib(int tempsRestant, Collection<Book> nonScannesBooks) {
+        List<Book> books = getBooksScanables(tempsRestant, nonScannesBooks);
+        for(Book b: books) {
+            livresScannes.add(b);
+            nonScannesBooks.remove(b);
+        }
+    }
+     
+    public int calculateLibScore(int tempsRestant, List<Book> nonScannesBooks, List<Library> libsnonInit) {
+        int scoreLibrary = 0;
+        int tp = tempsRestant;
+        List<Book> listBookRest = nonScannesBooks;
+        List<Library> listLibRest = libsnonInit;
+        List<Book> books = getBooksScanables(tempsRestant, nonScannesBooks);
+        for(Book b: books) {
+            scoreLibrary += b.getScore();
+        }
+        processLib(tp, listBookRest);
+        while(tp > 0 || listBookRest.isEmpty() || listLibRest.isEmpty()) {
+            listLibRest.sort((l1, l2) -> -Integer.compare(l1.calculateLibScore(tempsRestant, nonScannesBooks),
+                    l2.calculateLibScore(tempsRestant, nonScannesBooks)));
+            Library l = listLibRest.get(0);
+            scoreLibrary += l.calculateLibScore(tempsRestant, nonScannesBooks);
+            l.processLib(tempsRestant, nonScannesBooks);
+            
+            listLibRest.remove(l);
+            tp -= l.getNbOfDayToProcess();
+        }
+        return scoreLibrary;
+    }
 }
