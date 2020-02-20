@@ -64,12 +64,23 @@ public class Library {
         return books;
     }
     
-    public void processLib(int tempsRestant, Collection<Book> nonScannesBooks) {
+    public List<Book> processLib(int tempsRestant, Collection<Book> nonScannesBooks) {
         List<Book> books = getBooksScanables(tempsRestant, nonScannesBooks);
+        List<Book> restants = new ArrayList<>(nonScannesBooks);
         for(Book b: books) {
             livresScannes.add(b);
-            nonScannesBooks.remove(b);
+            restants.remove(b);
         }
+        return restants;
+    }
+    
+    public List<Book> processLibwithoutSaveBooks(int tempsRestant, Collection<Book> nonScannesBooks) {
+        List<Book> books = getBooksScanables(tempsRestant, nonScannesBooks);
+        List<Book> restants = new ArrayList<>(nonScannesBooks);
+        for(Book b: books) {
+            restants.remove(b);
+        }
+        return restants;
     }
      
     public int calculateLibScore(int tempsRestant, List<Book> nonScannesBooks, List<Library> libsnonInit) {
@@ -77,22 +88,22 @@ public class Library {
         int tp = tempsRestant;
         List<Book> listBookRest = new ArrayList<>(nonScannesBooks);
         List<Library> listLibRest = new ArrayList<>(libsnonInit);
-        List<Book> books = getBooksScanables(tempsRestant, nonScannesBooks);
+        List<Book> books = getBooksScanables(tp, listBookRest);
         for(Book b: books) {
             scoreLibrary += b.getScore();
         }
-        processLib(tp, listBookRest);
+        listBookRest = processLibwithoutSaveBooks(tp, listBookRest);
         listLibRest.remove(this);
         while(tp > 0 && !listBookRest.isEmpty() && !listLibRest.isEmpty()) {
             Map<Library, Integer> libmap = new HashMap<>();
             for(Library lib: listLibRest) {
-                libmap.put(lib, lib.calculateLibScore(tempsRestant, nonScannesBooks, listLibRest));
+                libmap.put(lib, lib.calculateLibScore(tp, listBookRest, listLibRest));
             }
             listLibRest.sort((l1, l2) -> -Integer.compare(libmap.get(l1),
                     libmap.get(l2)));
             Library l = listLibRest.get(0);
-            scoreLibrary += l.calculateLibScore(tempsRestant, nonScannesBooks, listLibRest);
-            l.processLib(tempsRestant, nonScannesBooks);
+            scoreLibrary += l.calculateLibScore(tp, listBookRest, listLibRest);
+            listBookRest = l.processLibwithoutSaveBooks(tp, listBookRest);
             
             listLibRest.remove(l);
             tp -= l.getNbOfDayToProcess();

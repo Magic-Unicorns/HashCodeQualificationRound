@@ -37,7 +37,7 @@ public class Algo1 {
                     libmap.get(l2)));
             Library l = nonInitLibs.get(0);
             scoreMax += l.calculateLibScore(tempsRestant, nonScannesBooks);
-            l.processLib(tempsRestant, nonScannesBooks);
+            nonScannesBooks = l.processLib(tempsRestant, nonScannesBooks);
             libs.add(l);
             nonInitLibs.remove(l);
             tempsRestant -= l.getNbOfDayToProcess();
