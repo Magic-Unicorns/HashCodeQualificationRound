@@ -60,7 +60,17 @@ public class Library {
 
     protected List<Book> getBooksScanables(int tempsRestant, Collection<Book> nonScannesBooks) {
         int nbBooksMax = (tempsRestant - getNbOfDayToProcess())*getBookShippedPerDay();
-        List<Book> books = getBooks().stream().filter(b -> nonScannesBooks.contains(b)).limit(nbBooksMax).collect(Collectors.toList());
+        
+        Set<Book> nonScanSet = new HashSet<>(nonScannesBooks);
+        
+        List<Book> books = getBooks().stream().filter(b -> nonScanSet.contains(b)).collect(Collectors.toList());
+       
+        List<Book> returnBooks = new ArrayList<>();
+        
+        for(int i= 0; i< Math.min(nbBooksMax, books.size()) ; i++) {
+            returnBooks.add(books.get(i));
+        }
+        
         return books;
     }
     
