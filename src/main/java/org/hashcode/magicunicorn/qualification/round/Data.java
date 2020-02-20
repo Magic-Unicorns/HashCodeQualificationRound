@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Data {
 	private final int numberOfDifferentBooks;
@@ -43,6 +44,11 @@ public class Data {
 		return books.values();
 	}
 
+	public List<Book> getBooksAsList() {
+		return books.values().stream().sorted((b1,b2)-> -Integer.compare(b1.getScore(), b2.getScore())).collect(Collectors.toList());
+	}
+
+	
 	public void addBooks(List<Book> parseListofBook) {
 		parseListofBook.forEach(b-> books.put(b.getId(), b));
 	}

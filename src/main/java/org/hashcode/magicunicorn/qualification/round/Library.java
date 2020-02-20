@@ -1,5 +1,6 @@
 package org.hashcode.magicunicorn.qualification.round;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,14 +15,17 @@ public class Library {
 	private final int nbOfDayToProcess;
 	private final int bookShippedPerDay;
 	private final HashSet<Book> books;
+	private final int id;
 	
 	private List<Book> livresScannes;
 
-	public Library(int nbOfBook, int nbOfDayToProcess, int bookShippedPerDay) {
+	public Library(int id,int nbOfBook, int nbOfDayToProcess, int bookShippedPerDay) {
+		this.id = id;
 		this.nbOfBook = nbOfBook;
 		this.nbOfDayToProcess = nbOfDayToProcess;
 		this.bookShippedPerDay = bookShippedPerDay;
 		this.books = new HashSet<>();
+		this.livresScannes = new ArrayList<>(nbOfBook);
 	}
 
 	public void addBook(Book book) {
@@ -42,7 +46,7 @@ public class Library {
 	}
 
     public Set<Book> getBooks(){
-        return null;
+        return books;
     }
     
     public int calculateLibScore(int tempsRestant, Collection<Book> nonScannesBooks) {
@@ -95,4 +99,8 @@ public class Library {
         }
         return scoreLibrary;
     }
+
+	public int getId() {
+		return id;
+	}
 }

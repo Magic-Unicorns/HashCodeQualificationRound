@@ -1,8 +1,7 @@
 package org.hashcode.magicunicorn.qualification.round;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,7 @@ public class Algo1 {
 
     int tempsRestant;
 
-    Collection<Book> nonScannesBooks;
+    List<Book> nonScannesBooks;
 
     int scoreMax;
 
@@ -18,7 +17,7 @@ public class Algo1 {
 
     public Algo1(Data data) {
         this.tempsRestant = data.getNumberOfDay();
-        this.nonScannesBooks = data.getBooks();
+        this.nonScannesBooks = data.getBooksAsList();
         scoreMax = 0;
         this.nonInitLibs = data.getLibraries();
     }

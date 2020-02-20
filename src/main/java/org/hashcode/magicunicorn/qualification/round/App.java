@@ -25,7 +25,7 @@ public class App {
 
 	private Library parseLibrary(String libParameter, String libcontent, int id, Data data) {
 		try (Scanner sc = new Scanner(libParameter); Scanner content = new Scanner(libcontent)) {
-			Library lib = new Library(sc.nextInt(), sc.nextInt(), sc.nextInt());
+			Library lib = new Library(id,sc.nextInt(), sc.nextInt(), sc.nextInt());
 			while (content.hasNextInt()) {
 				lib.addBook(data.getBookById(content.nextInt()).orElseThrow(IllegalStateException::new));
 			}
@@ -50,8 +50,8 @@ public class App {
 	}
 
 	public void run() { // run algo
-		// TODO Auto-generated method stub
-
+		Algo1 alg = new Algo1(data);
+		List<Library> runAlgo = alg.runAlgo();
+		
 	}
-
 }
