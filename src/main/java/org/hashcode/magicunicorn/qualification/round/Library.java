@@ -60,7 +60,7 @@ public class Library {
 
     protected List<Book> getBooksScanables(int tempsRestant, Collection<Book> nonScannesBooks) {
         int nbBooksMax = (tempsRestant - getNbOfDayToProcess())*getBookShippedPerDay();
-        List<Book> books = getBooks().stream().filter(b -> nonScannesBooks.contains(b)).sorted((b1,b2)->-Integer.compare(b1.getScore(), b2.getScore())).limit(nbBooksMax).collect(Collectors.toList());
+        List<Book> books = getBooks().stream().filter(b -> nonScannesBooks.contains(b)).limit(nbBooksMax).collect(Collectors.toList());
         return books;
     }
     
@@ -75,8 +75,8 @@ public class Library {
     public int calculateLibScore(int tempsRestant, List<Book> nonScannesBooks, List<Library> libsnonInit) {
         int scoreLibrary = 0;
         int tp = tempsRestant;
-        List<Book> listBookRest = nonScannesBooks;
-        List<Library> listLibRest = libsnonInit;
+        List<Book> listBookRest = new ArrayList<>(nonScannesBooks);
+        List<Library> listLibRest = new ArrayList<>(libsnonInit);
         List<Book> books = getBooksScanables(tempsRestant, nonScannesBooks);
         for(Book b: books) {
             scoreLibrary += b.getScore();
@@ -86,12 +86,12 @@ public class Library {
         while(tp > 0 && !listBookRest.isEmpty() && !listLibRest.isEmpty()) {
             Map<Library, Integer> libmap = new HashMap<>();
             for(Library lib: listLibRest) {
-                libmap.put(lib, lib.calculateLibScore(tempsRestant, nonScannesBooks));
+                libmap.put(lib, lib.calculateLibScore(tempsRestant, nonScannesBooks, listLibRest));
             }
             listLibRest.sort((l1, l2) -> -Integer.compare(libmap.get(l1),
                     libmap.get(l2)));
             Library l = listLibRest.get(0);
-            scoreLibrary += l.calculateLibScore(tempsRestant, nonScannesBooks);
+            scoreLibrary += l.calculateLibScore(tempsRestant, nonScannesBooks, listLibRest);
             l.processLib(tempsRestant, nonScannesBooks);
             
             listLibRest.remove(l);
