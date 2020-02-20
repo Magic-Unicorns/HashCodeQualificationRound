@@ -12,4 +12,18 @@ public class Book {
 		this.data = data;
 	}
 
+    public int getId() {
+        return id;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public Data getData() {
+        return data;
+    }
+	
+	
+
 }

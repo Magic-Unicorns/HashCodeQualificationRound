@@ -10,7 +10,11 @@ public class Data {
 	private final List<Book> books;
 	private final List<Library> libraries;
 
-	public Data(int numberOfDifferentBooks, int numberOflibraries, int numberOfDay) {
+	public List<Library> getLibraries() {
+        return libraries;
+    }
+
+    public Data(int numberOfDifferentBooks, int numberOflibraries, int numberOfDay) {
 		this(numberOfDifferentBooks, numberOflibraries, numberOfDay, new ArrayList<>(), new ArrayList<>());
 	}
 
