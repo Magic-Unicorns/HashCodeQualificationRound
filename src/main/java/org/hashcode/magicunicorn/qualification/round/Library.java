@@ -1,8 +1,10 @@
 package org.hashcode.magicunicorn.qualification.round;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -76,9 +78,14 @@ public class Library {
             scoreLibrary += b.getScore();
         }
         processLib(tp, listBookRest);
+        listLibRest.remove(this);
         while(tp > 0 && !listBookRest.isEmpty() && !listLibRest.isEmpty()) {
-            listLibRest.sort((l1, l2) -> -Integer.compare(l1.calculateLibScore(tempsRestant, nonScannesBooks),
-                    l2.calculateLibScore(tempsRestant, nonScannesBooks)));
+            Map<Library, Integer> libmap = new HashMap<>();
+            for(Library lib: listLibRest) {
+                libmap.put(lib, lib.calculateLibScore(tempsRestant, nonScannesBooks));
+            }
+            listLibRest.sort((l1, l2) -> -Integer.compare(libmap.get(l1),
+                    libmap.get(l2)));
             Library l = listLibRest.get(0);
             scoreLibrary += l.calculateLibScore(tempsRestant, nonScannesBooks);
             l.processLib(tempsRestant, nonScannesBooks);

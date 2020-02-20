@@ -1,8 +1,10 @@
 package org.hashcode.magicunicorn.qualification.round;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Algo1 {
 
@@ -24,8 +26,16 @@ public class Algo1 {
     public List<Library> runAlgo() {
         List<Library> libs = new ArrayList<>();
         while (tempsRestant > 0 && !nonScannesBooks.isEmpty() && !nonInitLibs.isEmpty()) {
-            nonInitLibs.sort((l1, l2) -> -Integer.compare(l1.calculateLibScore(tempsRestant, nonScannesBooks),
-                    l2.calculateLibScore(tempsRestant, nonScannesBooks)));
+            
+            
+            Map<Library, Integer> libmap = new HashMap<>();
+            for(Library lib: nonInitLibs) {
+                libmap.put(lib, lib.calculateLibScore(tempsRestant, nonScannesBooks, nonInitLibs));
+            }
+            
+            
+            nonInitLibs.sort((l1, l2) -> -Integer.compare(libmap.get(l1),
+                    libmap.get(l2)));
             Library l = nonInitLibs.get(0);
             scoreMax += l.calculateLibScore(tempsRestant, nonScannesBooks);
             l.processLib(tempsRestant, nonScannesBooks);
