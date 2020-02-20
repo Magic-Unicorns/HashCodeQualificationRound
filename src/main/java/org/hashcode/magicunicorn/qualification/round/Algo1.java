@@ -23,7 +23,7 @@ public class Algo1 {
 
     public List<Library> runAlgo() {
         List<Library> libs = new ArrayList<>();
-        while (tempsRestant > 0) {
+        while (tempsRestant > 0 && !nonScannesBooks.isEmpty() && !nonInitLibs.isEmpty()) {
             nonInitLibs.sort((l1, l2) -> -Integer.compare(l1.calculateLibScore(tempsRestant, nonScannesBooks),
                     l2.calculateLibScore(tempsRestant, nonScannesBooks)));
             Library l = nonInitLibs.get(0);
