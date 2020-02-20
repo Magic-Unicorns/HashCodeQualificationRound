@@ -16,15 +16,21 @@ public class App {
 		data.addBooks(parseListofBook(iterator.next(), data.getNumberOfDifferentBooks(), data));
 		int i = 0;
 		while (iterator.hasNext()) {
-			data.addLibrary(parseLibrary(iterator.next(), iterator.next(), i++, data));
+			String libparam = iterator.next();
+			if (!libparam.trim().isEmpty()) {
+				data.addLibrary(parseLibrary(libparam, iterator.next(), i++, data));
+			}
 		}
 	}
 
-	private Library parseLibrary(String next, String next2, int id, Data data) {
-		try (Scanner sc = new Scanner(next)) {
+	private Library parseLibrary(String libParameter, String libcontent, int id, Data data) {
+		try (Scanner sc = new Scanner(libParameter); Scanner content = new Scanner(libcontent)) {
 			Library lib = new Library(sc.nextInt(), sc.nextInt(), sc.nextInt());
+			while (content.hasNextInt()) {
+				lib.addBook(data.getBookById(content.nextInt()).orElseThrow(IllegalStateException::new));
+			}
+			return lib;
 		}
-		return null;
 	}
 
 	private Data parseHeader(String header) {

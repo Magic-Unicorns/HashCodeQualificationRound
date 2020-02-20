@@ -1,19 +1,47 @@
 package org.hashcode.magicunicorn.qualification.round;
 
+<<<<<<< HEAD
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+=======
+import java.util.HashSet;
+import java.util.Set;
+>>>>>>> end parser
 
 public class Library {
 
-	private int nbOfBook;
-	private int nbOfDayToProcess;
-	private int bookShippedPerDay;
+	private final int nbOfBook;
+	private final int nbOfDayToProcess;
+	private final int bookShippedPerDay;
+	private final HashSet<Book> books;
 
 	public Library(int nbOfBook, int nbOfDayToProcess, int bookShippedPerDay) {
 		this.nbOfBook = nbOfBook;
 		this.nbOfDayToProcess = nbOfDayToProcess;
 		this.bookShippedPerDay = bookShippedPerDay;
+		this.books = new HashSet<>();
+	}
+
+	public void addBook(Book book) {
+		book.addOwningLibrary(this);
+		getBooks().add(book);
+	}
+
+	public int getNbOfBook() {
+		return nbOfBook;
+	}
+
+	public int getNbOfDayToProcess() {
+		return nbOfDayToProcess;
+	}
+
+	public int getBookShippedPerDay() {
+		return bookShippedPerDay;
+	}
+
+	public Set<Book> getBooks() {
+		return books;
 	}
 
     public int getSignTime() {
