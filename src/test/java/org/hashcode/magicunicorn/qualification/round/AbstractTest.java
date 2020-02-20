@@ -19,6 +19,7 @@ class AbstractTest {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
 					.withZone(ZoneId.systemDefault());
 			Path outputFile = Paths.get("output", formatter.format(i));
+			outputFile.getParent().toFile().mkdirs();
 			new App(Files.lines(Paths.get(getClass().getResource(string).toURI()), StandardCharsets.UTF_8)
 					.collect(Collectors.toList()), outputFile).run();
 		} catch (IOException | URISyntaxException e) {
