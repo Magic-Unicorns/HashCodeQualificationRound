@@ -103,4 +103,8 @@ public class Library {
 	public int getId() {
 		return id;
 	}
+
+	public List<Book> getScannedBook() {
+		return livresScannes;
+	}
 }

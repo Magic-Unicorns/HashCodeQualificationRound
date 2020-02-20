@@ -1,16 +1,23 @@
 package org.hashcode.magicunicorn.qualification.round;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class App {
 
 	private Data data;
+	private Path outputFile;
 
 	public App(List<String> inputInFile, Path outputFile) { // in out setting
+		this.outputFile = outputFile;
 		Iterator<String> iterator = inputInFile.iterator();
 		data = parseHeader(iterator.next());
 		data.addBooks(parseListofBook(iterator.next(), data.getNumberOfDifferentBooks(), data));
@@ -25,7 +32,7 @@ public class App {
 
 	private Library parseLibrary(String libParameter, String libcontent, int id, Data data) {
 		try (Scanner sc = new Scanner(libParameter); Scanner content = new Scanner(libcontent)) {
-			Library lib = new Library(id,sc.nextInt(), sc.nextInt(), sc.nextInt());
+			Library lib = new Library(id, sc.nextInt(), sc.nextInt(), sc.nextInt());
 			while (content.hasNextInt()) {
 				lib.addBook(data.getBookById(content.nextInt()).orElseThrow(IllegalStateException::new));
 			}
@@ -49,9 +56,18 @@ public class App {
 		return output;
 	}
 
-	public void run() { // run algo
+	public void run() throws IOException { // run algo
 		Algo1 alg = new Algo1(data);
 		List<Library> runAlgo = alg.runAlgo();
-		
+		try (BufferedWriter newBufferedWriter = Files.newBufferedWriter(outputFile, StandardCharsets.US_ASCII)) {
+			for (Library lib : runAlgo) {
+				List<Book> scannedBook = lib.getScannedBook();
+				String l1 = lib.getId() + " " + scannedBook.size();
+				String l2 = String.join(" ",
+						scannedBook.stream().map(Book::getId).map(String::valueOf).collect(Collectors.toList()));
+				newBufferedWriter.append(l1 + System.lineSeparator());
+				newBufferedWriter.append(l2 + System.lineSeparator());
+			}
+		}
 	}
 }
