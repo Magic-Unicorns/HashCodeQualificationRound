@@ -37,18 +37,4 @@ public class Book {
 		return owningLibraries;
 	}
 
-    public int getId() {
-        return id;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public Data getData() {
-        return data;
-    }
-	
-	
-
 }

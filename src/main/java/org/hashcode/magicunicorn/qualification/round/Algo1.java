@@ -1,13 +1,13 @@
 package org.hashcode.magicunicorn.qualification.round;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Algo1 {
 
     int tempsRestant;
 
-    List<Book> nonScannesBooks;
+    Collection<Book> nonScannesBooks;
 
     int scoreMax;
 
@@ -27,7 +27,7 @@ public class Algo1 {
             Library l = nonInitLibs.get(0);
             scoreMax += l.calculateLibScore(tempsRestant, nonScannesBooks);
             nonInitLibs.remove(l);
-            tempsRestant -= l.getSignTime();
+            tempsRestant -= l.getNbOfDayToProcess();
         }
     }
 }
