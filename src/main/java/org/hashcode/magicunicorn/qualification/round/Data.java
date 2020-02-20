@@ -1,24 +1,24 @@
 package org.hashcode.magicunicorn.qualification.round;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class Data {
 	private final int numberOfDifferentBooks;
 	private final int numberOfLibraries;
 	private final int numberOfDay;
-	private final List<Book> books;
+	private final Map<Integer,Book> books;
 	private final List<Library> libraries;
 
-	public List<Library> getLibraries() {
-        return libraries;
-    }
-
-    public Data(int numberOfDifferentBooks, int numberOflibraries, int numberOfDay) {
-		this(numberOfDifferentBooks, numberOflibraries, numberOfDay, new ArrayList<>(), new ArrayList<>());
+	public Data(int numberOfDifferentBooks, int numberOflibraries, int numberOfDay) {
+		this(numberOfDifferentBooks, numberOflibraries, numberOfDay, new HashMap<>(), new ArrayList<>());
 	}
 
-	public Data(int numberOfDifferentBooks, int numberOflibraries, int numberOfDay, List<Book> books,List<Library> libraries) {
+	public Data(int numberOfDifferentBooks, int numberOflibraries, int numberOfDay, Map<Integer,Book> books,List<Library> libraries) {
 		super();
 		this.numberOfDifferentBooks = numberOfDifferentBooks;
 		this.numberOfLibraries = numberOflibraries;
@@ -39,16 +39,23 @@ public class Data {
 		return numberOfDay;
 	}
 
-	public List<Book> getBooks() {
-		return books;
+	public Collection<Book> getBooks() {
+		return books.values();
 	}
 
 	public void addBooks(List<Book> parseListofBook) {
-		books.addAll(parseListofBook);
+		parseListofBook.forEach(b-> books.put(b.getId(), b));
 	}
 
 	public void addLibrary(Library parseLibrary) {
 		libraries.add(parseLibrary);
 	}
 
+	public Optional<Book> getBookById(int id) {
+		return Optional.ofNullable(books.get(id));
+	}
+	
+	public List<Library> getLibraries() {
+        return libraries;
+    }
 }
