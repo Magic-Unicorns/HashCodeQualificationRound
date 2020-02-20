@@ -1,0 +1,2 @@
+# HashCodeQualificationRound
+HashCodeQualificationRound 2020
